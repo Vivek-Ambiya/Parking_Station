@@ -7,33 +7,27 @@ public class ParkingZone : MonoBehaviour
     [SerializeField] private Color parkedColor = Color.green;
     [SerializeField] private Color defaultColor = Color.white;
 
+    private Renderer zoneRenderer;
+
+    private void Awake()
+    {
+        zoneRenderer = GetComponent<Renderer>();
+    }
+
     private void Reset()
     {
-        // Ensure collider is trigger
         GetComponent<Collider>().isTrigger = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-
-        ChangeColor(other, parkedColor);
+        zoneRenderer.material.color = parkedColor;
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-
-        ChangeColor(other, defaultColor);
-    }
-
-    private void ChangeColor(Collider player, Color color)
-    {
-        Renderer renderer = player.GetComponent<Renderer>();
-
-        if (renderer != null)
-        {
-            renderer.material.color = color;
-        }
+        zoneRenderer.material.color = defaultColor;
     }
 }
