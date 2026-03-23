@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -10,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float acceleration = 20f;
     [SerializeField] private float rotationSpeed = 12f;
+    [SerializeField] private float brakeForce = 10f;
 
     [Header("Physics")]
     [SerializeField] private float groundDrag = 5f;
@@ -57,6 +59,12 @@ public class PlayerMovement : MonoBehaviour
     private void HandleMovement()
     {
         Vector2 input = inputProvider.GetMovementInput();
+        // Break System
+        if (Input.GetKey(KeyCode.Space))
+        {
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, brakeForce * Time.fixedDeltaTime);
+            return;
+        }
 
         Vector3 desiredDirection = new Vector3(input.x, 0f, input.y).normalized;
 
